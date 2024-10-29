@@ -2823,6 +2823,12 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@yyp/llm_unit_test@workspace:*, @yyp/llm_unit_test@workspace:packages/llm_unit_test":
+  version: 0.0.0-use.local
+  resolution: "@yyp/llm_unit_test@workspace:packages/llm_unit_test"
+  languageName: unknown
+  linkType: soft
+
 "@yyp/shared@workspace:*, @yyp/shared@workspace:packages/shared":
   version: 0.0.0-use.local
   resolution: "@yyp/shared@workspace:packages/shared"
@@ -3325,6 +3331,7 @@ __metadata:
     "@react-native/typescript-config": "npm:0.73.1"
     "@types/react": "npm:^18.2.6"
     "@types/react-test-renderer": "npm:^18.0.0"
+    "@yyp/llm_unit_test": "workspace:*"
     "@yyp/shared": "workspace:*"
     babel-jest: "npm:^29.6.3"
     eslint: "npm:^8.19.0"

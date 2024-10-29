@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@yyp/llm_unit_test": "workspace:*",
     "@yyp/shared": "workspace:*",
     "react": "18.2.0",
     "react-native": "0.73.10"
