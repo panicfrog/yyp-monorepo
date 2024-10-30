@@ -6,7 +6,7 @@
  */
 
 import { helloworld } from '@yyp/shared';
-import { codeGenerate, OllamaApiClient } from '@yyp/llm_unit_test';
+import { OllamaApiClient } from '@yyp/llm_unit_test';
 import React, { useState } from 'react';
 import {
   SafeAreaView,
@@ -16,7 +16,10 @@ import {
   View,
   Button,
   TextInput,
-  StyleSheet
+  StyleSheet,
+  ActivityIndicator,
+  Text,
+  Keyboard
 } from 'react-native';
 
 import {
@@ -28,10 +31,14 @@ import {
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const [text, setText] = useState('');
+  const [generateText, setGenerateText] = useState<string | null>(null)
+  const [loading, setLoading] = useState(false)
   const apiClient = new OllamaApiClient();
 
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    // backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: Colors.lighter,
+    flex: 1
   };
 
   return (
@@ -40,41 +47,47 @@ function App(): React.JSX.Element {
         barStyle={isDarkMode ? 'light-content' : 'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <ScrollView
-        keyboardDismissMode="interactive"
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <View style={{ alignSelf: 'center', alignItems: 'center', paddingTop: 100 }}>
-          <TextInput
-            style={styles.textInput}
-            // inputAccessoryViewID={inputAccessoryViewID}
-            onChangeText={setText}
-            value={text}
-            placeholder={'Please type here…'}
-          />
-          <Button 
-            title='call shared function'
-            onPress={() => {
-              helloworld()
-            }}
-          />
+      <View style={styles.textInputContainer}>
+       <TextInput
+          onChangeText={setText}
+          multiline={true}
+          value={text}
+          placeholder={'Please type here…'}
+        />
+      </View>
            <Button 
-            title='GenCode'
+            title='generate'
             onPress={async () => {
               if (text.length <= 0 ) {
                 return
               }
               try {
+                Keyboard.dismiss()
+                setLoading(true)
+                setGenerateText(null)
                 const completion = await apiClient.generateCompletion({
                   model: 'llama3.2',
                   prompt: text
                 });
+                setLoading(false)
                 console.log('补全结果:', completion.response);
+                setGenerateText(completion.response)
               } catch (error: any) {
+                setLoading(false)
                 console.log(error)
               }
             }}
           />
+      <ScrollView
+        keyboardDismissMode="none"
+        contentInsetAdjustmentBehavior="automatic"
+        style={backgroundStyle}>
+        <View style={{ alignSelf: 'center', alignItems: 'center', paddingTop: 40 }}>
+           
+          {
+            generateText ? <Text style={{marginHorizontal: 15}}>{generateText}</Text> : null
+          } 
+           <ActivityIndicator animating={loading} size="large" />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -87,8 +100,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 20,
   },
-  textInput: {
-    padding: 16,
+  textInputContainer: {
+    padding: 5,
+    alignSelf: 'center',
+    minHeight: 60,
+    width: '80%',
     borderColor: 'black',
     borderWidth: 1,
   },
