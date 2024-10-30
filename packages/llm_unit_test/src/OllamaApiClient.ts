@@ -135,7 +135,7 @@ type ShowModelInfoResponse = {
 class OllamaApiClient {
   private baseUrl: string;
 
-  constructor(baseUrl: string = 'http://localhost:11434') {
+  constructor(baseUrl: string = 'http://172.22.78.147:11434') {
     this.baseUrl = baseUrl;
   }
 
